@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_templet_project/extension/ddlog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-
 String kNavigationExamplePage = '''
 <!DOCTYPE html><html>
 <head><title>Navigation Delegate Example</title></head>
@@ -37,7 +36,8 @@ class AppWebViewDemo extends StatefulWidget {
 }
 
 class _AppWebViewDemoState extends State<AppWebViewDemo> {
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   String _currentTitle = "";
   double _progress = 0;
@@ -52,7 +52,13 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentTitle, style: TextStyle(fontSize: 16,), textAlign: TextAlign.center,),
+        title: Text(
+          _currentTitle,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
         leadingWidth: 100,
         leading: buildRight(context),
         actions: [
@@ -72,7 +78,7 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
               onProgress: (int progress) {
                 // ddlog("WebView is loading(progress: $progress%_${progress*0.01})");
                 setState(() {
-                  _progress = progress*0.01;
+                  _progress = progress * 0.01;
                 });
                 // ddlog(_progress);
               },
@@ -94,14 +100,15 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
                 debugPrint('Page finished loading: $url');
                 setState(() {
                   // (await controller.data!.currentUrl())!
-                  _controller.future.then((value) => value.getTitle()).then((value) {
+                  _controller.future
+                      .then((value) => value.getTitle())
+                      .then((value) {
                     _currentTitle = value ?? "";
                   });
                 });
               },
               gestureNavigationEnabled: true,
             ),
-
             LinearProgressIndicator(
               value: _progress,
               // semanticsLabel: 'Linear progress indicator',
@@ -122,7 +129,7 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
         name: 'Toaster',
         onMessageReceived: (JavascriptMessage message) {
           // ignore: deprecated_member_use
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message.message)),
           );
         });
@@ -131,13 +138,14 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
   Widget favoriteButton() {
     return FutureBuilder<WebViewController>(
         future: _controller.future,
-        builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
+        builder: (BuildContext context,
+            AsyncSnapshot<WebViewController> controller) {
           if (controller.hasData) {
             return FloatingActionButton(
               onPressed: () async {
                 final url = (await controller.data!.currentUrl())!;
                 // ignore: deprecated_member_use
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Favorited $url')),
                 );
               },
@@ -151,7 +159,8 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
   Widget buildRefresh() {
     return FutureBuilder<WebViewController>(
         future: _controller.future,
-        builder: (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
           final webViewReady = snapshot.connectionState == ConnectionState.done;
           final controller = snapshot.data!;
           if (snapshot.hasData) {
@@ -160,41 +169,44 @@ class _AppWebViewDemoState extends State<AppWebViewDemo> {
               onPressed: !webViewReady
                   ? null
                   : () {
-                controller.reload();
-              },
+                      controller.reload();
+                    },
             );
           }
           return Container();
-      }
-    );
+        });
   }
-
 
   //
   Widget buildRight(BuildContext context) {
     return FutureBuilder<WebViewController>(
       future: _controller.future,
-      builder: (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
         final webViewReady = snapshot.connectionState == ConnectionState.done;
         final controller = snapshot.data!;
         return Row(
           children: <Widget>[
-            SizedBox(width: 10,),
-            Expanded(child: 
-              IconButton(
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
-                onPressed: !webViewReady ? null : () async {
-                  if (await controller.canGoBack()) {
-                    await controller.goBack();
-                  } else {
-                    Navigator.pop(context);
-                    return;
-                  }
-                },
+                onPressed: !webViewReady
+                    ? null
+                    : () async {
+                        if (await controller.canGoBack()) {
+                          await controller.goBack();
+                        } else {
+                          Navigator.pop(context);
+                          return;
+                        }
+                      },
               ),
             ),
-            Expanded(child: 
-              IconButton(
+            Expanded(
+              child: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
                   Navigator.pop(context);
@@ -228,7 +240,8 @@ class SampleMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<WebViewController>(
       future: controller,
-      builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
+      builder:
+          (BuildContext context, AsyncSnapshot<WebViewController> controller) {
         return PopupMenuButton<MenuOptions>(
           onSelected: (MenuOptions value) {
             switch (value) {
@@ -291,17 +304,19 @@ class SampleMenu extends StatelessWidget {
     );
   }
 
-  Future<void> _onShowUserAgent(WebViewController controller, BuildContext context) async {
+  Future<void> _onShowUserAgent(
+      WebViewController controller, BuildContext context) async {
     // Send a message with the user agent string to the Toaster JavaScript channel we registered
     // with the WebView.
     await controller.evaluateJavascript(
         'Toaster.postMessage("User Agent: " + navigator.userAgent);');
   }
 
-  Future<void> _onListCookies(WebViewController controller, BuildContext context) async {
+  Future<void> _onListCookies(
+      WebViewController controller, BuildContext context) async {
     final cookies = await controller.evaluateJavascript('document.cookie');
     // ignore: deprecated_member_use
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -313,25 +328,28 @@ class SampleMenu extends StatelessWidget {
     ));
   }
 
-  Future<void> _onAddToCache(WebViewController controller, BuildContext context) async {
+  Future<void> _onAddToCache(
+      WebViewController controller, BuildContext context) async {
     await controller.evaluateJavascript(
         'caches.open("test_caches_entry"); localStorage["test_localStorage"] = "dummy_entry";');
     // ignore: deprecated_member_use
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Added a test entry to cache.'),
     ));
   }
 
-  Future<void> _onListCache(WebViewController controller, BuildContext context) async {
+  Future<void> _onListCache(
+      WebViewController controller, BuildContext context) async {
     await controller.evaluateJavascript('caches.keys()'
         '.then((cacheKeys) => JSON.stringify({"cacheKeys" : cacheKeys, "localStorage" : localStorage}))'
         '.then((caches) => Toaster.postMessage(caches))');
   }
 
-  Future<void> _onClearCache(WebViewController controller, BuildContext context) async {
+  Future<void> _onClearCache(
+      WebViewController controller, BuildContext context) async {
     await controller.clearCache();
     // ignore: deprecated_member_use
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Cache cleared."),
     ));
   }
@@ -343,13 +361,15 @@ class SampleMenu extends StatelessWidget {
       message = 'There are no cookies.';
     }
     // ignore: deprecated_member_use
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
   }
 
-  Future<void> _onNavigationDelegateExample(WebViewController controller, BuildContext context) async {
-    final contentBase64 = base64Encode(Utf8Encoder().convert(kNavigationExamplePage));
+  Future<void> _onNavigationDelegateExample(
+      WebViewController controller, BuildContext context) async {
+    final contentBase64 =
+        base64Encode(Utf8Encoder().convert(kNavigationExamplePage));
     await controller.loadUrl('data:text/html;base64,$contentBase64');
   }
 
@@ -358,8 +378,7 @@ class SampleMenu extends StatelessWidget {
       return Container();
     }
     final cookieList = cookies.split(';');
-    final cookieWidgets =
-    cookieList.map((String cookie) => Text(cookie));
+    final cookieWidgets = cookieList.map((String cookie) => Text(cookie));
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -371,54 +390,63 @@ class SampleMenu extends StatelessWidget {
 class NavigationControls extends StatelessWidget {
   final Future<WebViewController> webViewControllerFuture;
 
-  const NavigationControls({Key? key, required this.webViewControllerFuture}) : super(key: key);
+  const NavigationControls({Key? key, required this.webViewControllerFuture})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<WebViewController>(
       future: webViewControllerFuture,
-      builder: (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
         final webViewReady = snapshot.connectionState == ConnectionState.done;
         final controller = snapshot.data!;
         return Row(
           children: <Widget>[
-            SizedBox(width: 10,),
-            Expanded(child: IconButton(
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: IconButton(
               icon: Icon(Icons.arrow_back_ios),
-              onPressed: !webViewReady ? null : () async {
-                if (await controller.canGoBack()) {
-                  await controller.goBack();
-                } else {
-                  // ignore: deprecated_member_use
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text("No back history item")),
-                  );
-                  return;
-                }
-              },)
+              onPressed: !webViewReady
+                  ? null
+                  : () async {
+                      if (await controller.canGoBack()) {
+                        await controller.goBack();
+                      } else {
+                        // ignore: deprecated_member_use
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("No back history item")),
+                        );
+                        return;
+                      }
+                    },
+            )),
+            SizedBox(
+              width: 30,
             ),
-            SizedBox(width: 30,),
-            Expanded(child:
-                SizedBox(
-                  width: 44,
-                  height: 44,
-                  child: IconButton(
-                  icon: Icon(Icons.arrow_forward_ios),
-                  onPressed: !webViewReady ? null : () async {
-                    if (await controller.canGoForward()) {
-                      await controller.goForward();
-                    } else {
-                      // ignore: deprecated_member_use
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text("No forward history item")),
-                      );
-                      return;
-                    }
-                  },
-                ),
-                )
-            ),
+            Expanded(
+                child: SizedBox(
+              width: 44,
+              height: 44,
+              child: IconButton(
+                icon: Icon(Icons.arrow_forward_ios),
+                onPressed: !webViewReady
+                    ? null
+                    : () async {
+                        if (await controller.canGoForward()) {
+                          await controller.goForward();
+                        } else {
+                          // ignore: deprecated_member_use
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("No forward history item")),
+                          );
+                          return;
+                        }
+                      },
+              ),
+            )),
             // SizedBox(width: 15,),
             // Expanded(child: IconButton(
             //   icon: Icon(Icons.replay),

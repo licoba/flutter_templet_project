@@ -1,13 +1,12 @@
 import 'package:badges/badges.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_templet_project/basicWidget/horizontal_cell.dart';
 import 'package:flutter_templet_project/extension/color_ext.dart';
 import 'package:flutter_templet_project/extension/widget_ext.dart';
 import 'package:flutter_templet_project/uti/R.dart';
 
 class BadgesDemo extends StatefulWidget {
-
-  const BadgesDemo({ Key? key, this.title}) : super(key: key);
+  const BadgesDemo({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -53,45 +52,47 @@ class _BadgesDemoState extends State<BadgesDemo> {
             _badgesWithBorder(),
             _listView(),
             _buildCell(),
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
           ],
         ),
       ),
     );
   }
+
   /// 透明度滑动组件
   _buildSlider() {
     return Row(
       children: [
         Expanded(
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Slider(
-                inactiveColor: Color(0xffC0C0C0),
-                activeColor: Color(0xff21BA45),
-                divisions: 100,
-                //label: 'Admitida',
-                value: sliderVN.value,
-                min: 0.0,
-                max: 100.0,
-                onChanged: (double value) {
-                  sliderVN.value = value;
-                  setState(() {});
-                },
-              );
-            }
-          ),
+          child: StatefulBuilder(builder: (context, setState) {
+            return Slider(
+              inactiveColor: Color(0xffC0C0C0),
+              activeColor: Color(0xff21BA45),
+              divisions: 100,
+              //label: 'Admitida',
+              value: sliderVN.value,
+              min: 0.0,
+              max: 100.0,
+              onChanged: (double value) {
+                sliderVN.value = value;
+                setState(() {});
+              },
+            );
+          }),
         ),
         ValueListenableBuilder(
-          valueListenable: sliderVN,
-          builder: (BuildContext context, double value, Widget? child) {
-            final result = (value/100).toStringAsFixed(2);
-            return TextButton(
-              onPressed: () { debugPrint(result); },
-              child: Text(result),
-            );
-          }
-        ),
+            valueListenable: sliderVN,
+            builder: (BuildContext context, double value, Widget? child) {
+              final result = (value / 100).toStringAsFixed(2);
+              return TextButton(
+                onPressed: () {
+                  debugPrint(result);
+                },
+                child: Text(result),
+              );
+            }),
       ],
     );
   }
@@ -131,13 +132,13 @@ class _BadgesDemoState extends State<BadgesDemo> {
     BadgeShape shape = BadgeShape.square,
     Gradient? gradient,
   }) {
-    final badgeChild = badgeValue != null ? Text(badgeValue,
-      style: TextStyle(
-          color: badgeColor,
-          fontSize: 10,
-          fontWeight: FontWeight.bold
-      ),
-    ) : badgeContent;
+    final badgeChild = badgeValue != null
+        ? Text(
+            badgeValue,
+            style: TextStyle(
+                color: badgeColor, fontSize: 10, fontWeight: FontWeight.bold),
+          )
+        : badgeContent;
 
     return Badge(
       shape: shape,
@@ -146,10 +147,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
       position: BadgePosition.topEnd(top: -12, end: -20),
       padding: EdgeInsets.all(2),
       gradient: gradient,
-      badgeContent: Opacity(
-        opacity: badgeContentOpacity,
-        child: badgeChild
-      ),
+      badgeContent: Opacity(opacity: badgeContentOpacity, child: badgeChild),
       child: child,
     );
   }
@@ -164,9 +162,8 @@ class _BadgesDemoState extends State<BadgesDemo> {
         style: TextStyle(color: Colors.white),
       ),
       child: IconButton(
-        icon: Icon(Icons.shopping_cart, color: Colors.black),
-        onPressed: () {}
-      ),
+          icon: Icon(Icons.shopping_cart, color: Colors.black),
+          onPressed: () {}),
     );
   }
 
@@ -175,7 +172,8 @@ class _BadgesDemoState extends State<BadgesDemo> {
       Tab(
         icon: Badge(
           badgeColor: Colors.blue,
-          badgeContent: Text('3',
+          badgeContent: Text(
+            '3',
             style: TextStyle(color: Colors.white),
           ),
           child: Icon(Icons.account_balance_wallet, color: Colors.grey),
@@ -184,46 +182,47 @@ class _BadgesDemoState extends State<BadgesDemo> {
       Tab(
         icon: _buildBadgeText(
           badgeValue: 'NEW',
-          child: Text('MUSIC',
+          child: Text(
+            'MUSIC',
             style: TextStyle(color: Colors.grey[600]),
           ),
         ),
       ),
       Tab(
         icon: ValueListenableBuilder(
-          valueListenable: sliderVN,
-          builder: (BuildContext context, double value, Widget? child) {
-            final result = (value/100);
-            return _buildBadgeText(
-              shape: BadgeShape.square,
-              gradient: _buildGraint(opacity: result),
-              badgeValue: '你我他',
-              badgeColor: Colors.black,
-              // badgeContentOpacity: result,
-              child: Text('Video',
-                style: TextStyle(color: Colors.black),
-              ),
-            );
-          }
-        ),
+            valueListenable: sliderVN,
+            builder: (BuildContext context, double value, Widget? child) {
+              final result = (value / 100);
+              return _buildBadgeText(
+                shape: BadgeShape.square,
+                gradient: _buildGraint(opacity: result),
+                badgeValue: '你我他',
+                badgeColor: Colors.black,
+                // badgeContentOpacity: result,
+                child: Text(
+                  'Video',
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
+            }),
       ),
       Tab(
         icon: ValueListenableBuilder(
-          valueListenable: sliderVN,
-          builder: (BuildContext context, double value, Widget? child) {
-            final result = (value/100);
-            return _buildBadgeText(
-              shape: BadgeShape.square,
-              gradient: _buildGraint(opacity: result),
-              badgeValue: '你我他',
-              badgeColor: Colors.black,
-              badgeContentOpacity: result,
-              child: Text('Game',
-                style: TextStyle(color: Colors.black),
-              ),
-            );
-          }
-        ),
+            valueListenable: sliderVN,
+            builder: (BuildContext context, double value, Widget? child) {
+              final result = (value / 100);
+              return _buildBadgeText(
+                shape: BadgeShape.square,
+                gradient: _buildGraint(opacity: result),
+                badgeValue: '你我他',
+                badgeColor: Colors.black,
+                badgeContentOpacity: result,
+                child: Text(
+                  'Game',
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
+            }),
       )
     ]);
   }
@@ -249,7 +248,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
               height: 5,
               width: 5,
               decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
             ),
             child: Icon(Icons.settings),
           ),
@@ -257,6 +256,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
       ],
     );
   }
+
   /// 购物车动作
   Widget _addRemoveCartButtons() {
     return Padding(
@@ -265,25 +265,23 @@ class _BadgesDemoState extends State<BadgesDemo> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ElevatedButton.icon(
-            onPressed: () {
-              setState(() {
-                _counter++;
-              });
-            },
-            icon: Icon(Icons.add),
-            label: Text('Add to cart')
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              if (_counter > 0) {
+              onPressed: () {
                 setState(() {
-                  _counter--;
+                  _counter++;
                 });
-              }
-            },
-            icon: Icon(Icons.remove),
-            label: Text('Remove from cart')
-          ),
+              },
+              icon: Icon(Icons.add),
+              label: Text('Add to cart')),
+          ElevatedButton.icon(
+              onPressed: () {
+                if (_counter > 0) {
+                  setState(() {
+                    _counter--;
+                  });
+                }
+              },
+              icon: Icon(Icons.remove),
+              label: Text('Remove from cart')),
         ],
       ),
     );
@@ -310,6 +308,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
       ),
     );
   }
+
   /// ElevatedButton 按钮角标
   Widget _elevatedButtonBadge() {
     return Badge(
@@ -330,24 +329,22 @@ class _BadgesDemoState extends State<BadgesDemo> {
       ),
     );
   }
+
   /// Chip 角标
   Widget _chipBadge() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('Chip with zero padding:'),
-        Badge(
-          badgeContent: Text(
-            '!',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          child: Chip(
-            label: Text('Hello'),
-            padding: EdgeInsets.all(0),
-          ),
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Text('Chip with zero padding:'),
+      Badge(
+        badgeContent: Text(
+          '!',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-      ]
-    );
+        child: Chip(
+          label: Text('Hello'),
+          padding: EdgeInsets.all(0),
+        ),
+      ),
+    ]);
   }
 
   Widget _badgeOnly() {
@@ -376,6 +373,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
       ),
     );
   }
+
   /// badge 带边框
   Widget _badgesWithBorder() {
     return Padding(
@@ -433,18 +431,21 @@ class _BadgesDemoState extends State<BadgesDemo> {
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
-              return _listTile(title: 'Messages', badgeValue: '2', shape: BadgeShape.square);
+              return _listTile(
+                  title: 'Messages', badgeValue: '2', shape: BadgeShape.square);
             case 1:
-              return _listTile(title: 'Friends', badgeValue: '你我他', shape: BadgeShape.square);
+              return _listTile(
+                  title: 'Friends',
+                  badgeValue: '你我他',
+                  shape: BadgeShape.square);
             default:
-              return _listTile(title: 'Events', badgeValue: '!', shape: BadgeShape.circle);
+              return _listTile(
+                  title: 'Events', badgeValue: '!', shape: BadgeShape.circle);
           }
         },
       ),
     );
   }
-
-
 
   Widget _listTile({
     required String title,
@@ -536,12 +537,7 @@ class _BadgesDemoState extends State<BadgesDemo> {
         arrow: Container(
           // color: Colors.green,
           // padding: EdgeInsets.all(8),
-          child: Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
-              color: Colors.grey
-          ),
-        )
-    );
+          child: Icon(Icons.arrow_forward_ios, size: 20, color: Colors.grey),
+        ));
   }
 }
