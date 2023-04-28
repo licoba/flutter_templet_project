@@ -6,8 +6,6 @@
 //  Copyright © 3/13/23 shang. All rights reserved.
 //
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,8 +72,12 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => ColorFilteredProvider()),
 
         ChangeNotifierProvider(create: (context) => CartModel()),
-        ChangeNotifierProvider<Person>(create: (ctx) => Person(),),
-        ChangeNotifierProvider<Foo>(create: (ctx) => Foo(),),
+        ChangeNotifierProvider<Person>(
+          create: (ctx) => Person(),
+        ),
+        ChangeNotifierProvider<Foo>(
+          create: (ctx) => Foo(),
+        ),
         Provider(create: (context) => CounterBloc()),
         ProxyProvider<Person, EatModel>(
           update: (ctx, person, eatModel) => EatModel(name: person.name),
@@ -85,16 +87,17 @@ Future<void> main() async {
     ),
   );
 
-  var systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  var systemUiOverlayStyle =
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 }
 
-void setCustomErrorPage(){
+void setCustomErrorPage() {
   // FlutterError.onError = (details) {
   //   FlutterError.presentError(details);
   // };
 
-  ErrorWidget.builder = (FlutterErrorDetails details){
+  ErrorWidget.builder = (FlutterErrorDetails details) {
     debugPrint("flutterErrorDetails:${details.toString()}");
     return ErrorCustomWidget(details: details);
   };
@@ -110,6 +113,7 @@ Future<void> initServices() async {
 Future<void> initDebugInfo() async {
   ///向Timeline事件中添加每个widget的build信息
   debugProfileBuildsEnabled = true;
+
   ///向timeline事件中添加每个renderObject的paint信息
   // debugProfilePaintsEnabled = true;
   // ///每个layer会出现一个边框,帮助区分layer层级
@@ -142,15 +146,15 @@ class MyApp extends StatelessWidget {
       initialRoute: AppPage.INITIAL,
       getPages: AppPage.routes,
       unknownRoute: AppPage.unknownRoute,
-      routingCallback: (routing){
+      routingCallback: (routing) {
         // if (routing != null) {
         //   ddlog([routing.previous, routing.current]);
         // }
       },
       // routes: {
-    //     "/": (context) => MyHomePage(),
-    //     "/TwoPage": (context) => TwoPage(),
-    //   },
+      //     "/": (context) => MyHomePage(),
+      //     "/TwoPage": (context) => TwoPage(),
+      //   },
     );
 
     return app;
@@ -169,7 +173,7 @@ class MyApp extends StatelessWidget {
 final kScaffoldKey = GlobalKey<ScaffoldState>();
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({ Key? key, this.title}) : super(key: key);
+  const MyHomePage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -203,7 +207,9 @@ class _MyHomePageState extends State<MyHomePage> {
         icon: Icon(Icons.message),
         label: "消息",
       ),
-      TabBarDemo(initialIndex: 3,),
+      TabBarDemo(
+        initialIndex: 3,
+      ),
     ),
     Tuple2(
       BottomNavigationBarItem(
@@ -270,7 +276,6 @@ class _MyHomePageState extends State<MyHomePage> {
       //   },
       //     children: pages,
       // ),
-
     );
     return Consumer<ColorFilteredProvider>(
       builder: (BuildContext context, provider, Widget? child) {
@@ -284,15 +289,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   ///创建导航栏
-  AppBar buildAppBar(){
+  AppBar buildAppBar() {
     return AppBar(
       title: Text(widget.title ?? "标题"),
       leading: Icon(Icons.arrow_back),
       actions: [
         PopupMenuButtonExt.fromEntryFromJson(
-            json: {"aa": "0",
-              "bb": "1",
-              "cc": "2"},
+            json: {"aa": "0", "bb": "1", "cc": "2"},
             checkedString: "aa",
             callback: (value) {
               setState(() => ddlog(value));
@@ -328,14 +331,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Container(
       padding: EdgeInsets.only(top: 100, left: 15, bottom: 100, right: 15),
-      child: Column( //Column控件用来垂直摆放子Widget
-        // crossAxisAlignment: CrossAxisAlignment.start, //水平方向距左对⻬
+      child: Column(
+          //Column控件用来垂直摆放子Widget
+          // crossAxisAlignment: CrossAxisAlignment.start, //水平方向距左对⻬
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(title, style: TextStyle(fontSize: 20),),
+            Text(
+              title,
+              style: TextStyle(fontSize: 20),
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal:15),
-              child: Text(message, style: TextStyle(fontSize: 14),),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                message,
+                style: TextStyle(fontSize: 14),
+              ),
             ),
             Row(
               children: [
@@ -343,20 +353,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     ddlog("以后再说");
                   },
-                  child: Text("以后再说", style: TextStyle(fontSize: 14),),
+                  child: Text(
+                    "以后再说",
+                    style: TextStyle(fontSize: 14),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     ddlog("立即升级");
                   },
-                  child: Text("立即升级",
+                  child: Text(
+                    "立即升级",
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ),
               ],
             ),
-          ]
-      ),
+          ]),
     );
   }
 }
@@ -388,7 +401,9 @@ class MyDrawer extends StatelessWidget {
                       //   "images/avatar.png",
                       //   width: 80,
                       // ),
-                      child: FlutterLogo(size: 60,),
+                      child: FlutterLogo(
+                        size: 60,
+                      ),
                     ),
                   ),
                   Text(
@@ -405,7 +420,7 @@ class MyDrawer extends StatelessWidget {
                     leading: Icon(Icons.add),
                     title: Text('Add account'),
                     trailing: Icon(Icons.add_a_photo),
-                    onTap: (){
+                    onTap: () {
                       ddlog(context);
                     },
                   ),
@@ -418,7 +433,7 @@ class MyDrawer extends StatelessWidget {
                   ListTile(
                     leading: Icon(Icons.settings),
                     title: Text('Manage accounts'),
-                    onTap: (){
+                    onTap: () {
                       ddlog(Icons.title);
                     },
                   ),
@@ -427,7 +442,7 @@ class MyDrawer extends StatelessWidget {
                     title: Text(
                       "Your Profile",
                     ),
-                    onTap: (){
+                    onTap: () {
                       debugPrint("Tapped Profile");
                     },
                   ),

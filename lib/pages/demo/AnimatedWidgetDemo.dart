@@ -9,18 +9,15 @@
 import 'package:flutter/material.dart';
 
 class AnimatedWidgetDemo extends StatefulWidget {
-
   final String? title;
 
-  const AnimatedWidgetDemo({ Key? key, this.title}) : super(key: key);
+  const AnimatedWidgetDemo({Key? key, this.title}) : super(key: key);
 
-  
   @override
   _AnimatedWidgetDemoState createState() => _AnimatedWidgetDemoState();
 }
 
 class _AnimatedWidgetDemoState extends State<AnimatedWidgetDemo> {
-
   double _padding = 10;
   var _align = Alignment.topRight;
   double _height = 100;
@@ -46,8 +43,7 @@ class _AnimatedWidgetDemoState extends State<AnimatedWidgetDemo> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               setState(() {
                 _padding += 10;
@@ -66,7 +62,7 @@ class _AnimatedWidgetDemoState extends State<AnimatedWidgetDemo> {
                 AnimatedPositioned(
                   duration: duration,
                   left: _left,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       setState(() {
                         _left = 100;
@@ -84,7 +80,7 @@ class _AnimatedWidgetDemoState extends State<AnimatedWidgetDemo> {
             child: AnimatedAlign(
               duration: duration,
               alignment: _align,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   setState(() {
                     _align = Alignment.center;
@@ -153,8 +149,6 @@ class _AnimatedWidgetDemoState extends State<AnimatedWidgetDemo> {
   }
 }
 
-
-
 class AnimatedDecoratedBox extends ImplicitlyAnimatedWidget {
   const AnimatedDecoratedBox({
     Key? key,
@@ -163,10 +157,10 @@ class AnimatedDecoratedBox extends ImplicitlyAnimatedWidget {
     Curve curve = Curves.linear,
     required Duration duration,
   }) : super(
-    key: key,
-    curve: curve,
-    duration: duration,
-  );
+          key: key,
+          curve: curve,
+          duration: duration,
+        );
   final BoxDecoration decoration;
   final Widget child;
 
@@ -174,7 +168,8 @@ class AnimatedDecoratedBox extends ImplicitlyAnimatedWidget {
   _AnimatedDecoratedBoxState createState() => _AnimatedDecoratedBoxState();
 }
 
-class _AnimatedDecoratedBoxState extends AnimatedWidgetBaseState<AnimatedDecoratedBox> {
+class _AnimatedDecoratedBoxState
+    extends AnimatedWidgetBaseState<AnimatedDecoratedBox> {
   late DecorationTween _decoration; //定义一个Tween
 
   @override
